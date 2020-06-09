@@ -1,0 +1,127 @@
+@model EKnjiznica.Dtos.BookViewModel
+
+@{
+    ViewData["Title"] = "Manage Categories";
+}
+<div class="row">
+  <div class="col-xs-2"></div>
+  <div class="col-xs-8">
+    <div class="box box-info">
+      <div class="box-header with-border">
+        <h3 class="box-title">Add New Book</h3>
+      </div>
+            <!-- /.box-header -->
+            <!-- form start -->
+      <form asp-action="AddBook" class="form-horizontal">
+        <div class="box-body">
+          <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+          <div class="form-group has-feedback">
+            <label asp-for="Title" class="col-sm-2 control-label">Title</label>
+              <div class="col-sm-10">
+                <input asp-for="Title" type="text" class="form-control" placeholder="Title">                    
+                <span asp-validation-for="Title" class="text-danger"></span>
+              </div>
+          </div>
+          <div class="form-group has-feedback">
+            <label asp-for="Author" class="col-sm-2 control-label">Author</label>
+              <div class="col-sm-10">
+                <input asp-for="Author" type="text" class="form-control" placeholder="Author">                    
+                <span asp-validation-for="Author" class="text-danger"></span>
+              </div>
+          </div>
+          <div class="form-group has-feedback">
+            <label asp-for="Price" class="col-sm-2 control-label">Price</label>
+              <div class="col-sm-10">
+                <input asp-for="Price" type="number" step="0.01" class="form-control" placeholder="Price">                    
+                <span asp-validation-for="Price" class="text-danger"></span>
+              </div>
+          </div>
+          <div class="form-group has-feedback">
+                  <label asp-for="CategoryId" class="col-sm-2 control-label">Category</label>
+                  <div class="col-sm-10">
+                    <select asp-for="CategoryId" class="form-control">
+                      @foreach (var item in Model.Categories)
+                      {
+                          <option value="@item.Id">@item.Description</option>
+                      }
+                    </select>
+                  </div>
+                </div>
+          <!-- /.box-body -->
+          <div class="box-footer">
+            <button asp-action="AddBook" asp-controller="Admin" type="submit" class="btn btn-info pull-right">Add Book</button>
+          </div>
+
+              <!-- /.box-footer -->
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box box-info">
+      <div class="box-header with-border">
+        <h3 class="box-title">Books</h3>
+        
+        <form asp-action="ManageBooks" class="form-horizontal">
+            <div class="input-group input-group-sm hidden-xs" style="width: 150px;">
+              <input asp-for="SearchTitle" type="text" class="form-control" placeholder="Title">              
+            </div>
+            
+            <div class="input-group input-group-sm hidden-xs" style="width: 150px;">
+              <input asp-for="SearchAuthor" type="text" class="form-control" placeholder="Author">
+            </div>
+
+            <div class="input-group input-group-sm hidden-xs" style="width: 150px;">
+              <select asp-for="SearchCategory">
+                <option value="">All</option>
+                @foreach (var item in Model.Categories)
+                {
+                    <option value="@item.Description">@item.Description</option>
+                }
+              </select>              
+            </div>
+          <div class="input-group-btn">
+                <button asp-action="ManageBooks" type="submit" class="btn btn-default">Filter<i class="fa fa-search"></i></button>
+              </div>
+        </form>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body table-responsive no-padding">
+        <table class="table table-hover">
+          <tbody><tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th></th>
+            <th></th>
+          </tr>
+          @foreach (var item in Model.Books)
+          {                
+              <tr>
+                <td>@Html.DisplayFor(modelItem => item.Id)</td>
+                <td>@Html.DisplayFor(modelItem => item.Title)</td>
+                <td>@Html.DisplayFor(modelItem => item.Author)</td>
+                <td>@Html.DisplayFor(modelItem => item.CategoryName)</td>
+                <td>@Html.DisplayFor(modelItem => item.Price)</td>               
+                <td>
+                    <a asp-route-id="@item.Id" asp-action="EditBook"> <button class="btn btn-warning">Edit</button></a>
+                </td>
+                <td>
+                    <form asp-action="DeleteBook">
+                      <button asp-route-id="@item.Id" asp-action="DeleteBook" type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </td>       
+              </tr>                
+          }
+        </tbody></table>
+      </div>
+      <!-- /.box-body -->
+    </div>
+    <!-- /.box -->
+  </div>
+</div>
